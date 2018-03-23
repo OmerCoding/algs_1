@@ -18,9 +18,13 @@ public class Percolation {
     
     public void open(int row, int col){
         int num = xyTo1D(row,col);
+        if((row < 1 || col < 1) || (row > size || col > size)){
+            throw new IllegalArgumentException();
+        }
         if(grid[row-1][col-1] == 0){
             if(num % size == 0){
                 if(num - size <= 0){
+                    x.union(0,xyTo1D(row,col));
                     if(isOpen(row+1,col)){
                         x.union(xyTo1D(row+1,col),xyTo1D(row,col));
                     }
@@ -28,6 +32,7 @@ public class Percolation {
                         x.union(xyTo1D(row,col-1),xyTo1D(row,col));
                     }
                 } else if(num + size > (size * size)){
+                    x.union((size * size + 1),xyTo1D(row,col));
                     if(isOpen(row-1,col)){
                         x.union(xyTo1D(row-1,col),xyTo1D(row,col));
                     }
@@ -48,6 +53,7 @@ public class Percolation {
             }
             else if(num % size == 1){
                 if(num - size <= 0){
+                    x.union(0,xyTo1D(row,col));
                     if(isOpen(row+1,col)){
                         x.union(xyTo1D(row+1,col),xyTo1D(row,col));
                     }
@@ -55,6 +61,7 @@ public class Percolation {
                         x.union(xyTo1D(row,col+1),xyTo1D(row,col));
                     }
                 } else if(num + size > (size * size)){
+                    x.union((size * size + 1),xyTo1D(row,col));
                     if(isOpen(row-1,col)){
                         x.union(xyTo1D(row-1,col),xyTo1D(row,col));
                     }
@@ -74,6 +81,7 @@ public class Percolation {
                 }
             } else {
                 if(num - size <= 0){
+                    x.union(0,xyTo1D(row,col));
                     if(isOpen(row,col-1)){
                         x.union(xyTo1D(row,col-1),xyTo1D(row,col));
                     }
@@ -84,6 +92,7 @@ public class Percolation {
                         x.union(xyTo1D(row+1,col),xyTo1D(row,col));
                     }
                 } else if(num + size > (size * size)){
+                    x.union((size * size + 1),xyTo1D(row,col));
                     if(isOpen(row,col-1)){
                         x.union(xyTo1D(row,col-1),xyTo1D(row,col));
                     }
@@ -114,6 +123,9 @@ public class Percolation {
     }
     
     public boolean isOpen(int row, int col){
+        if((row < 1 || col < 1) || (row > size || col > size)){
+            throw new IllegalArgumentException();
+        }
         if(grid[row-1][col-1]==1){
             return true;
         } else {
@@ -122,6 +134,9 @@ public class Percolation {
     }
         
     public boolean isFull(int row, int col){
+        if((row < 1 || col < 1) || (row > size || col > size)){
+            throw new IllegalArgumentException();
+        }
         if(grid[row-1][col-1]==0){
             return true;
         } else {
@@ -134,10 +149,10 @@ public class Percolation {
     }
     
     public boolean percolates(){
-        if(x.connected(0, n * n + 1){
+        if(x.connected(0, size * size + 1)){
             return true;
         } else {
-            return false
+            return false;
         }
     }
     
@@ -147,18 +162,19 @@ public class Percolation {
    
     public static void main(String[] args){
         Percolation test_perc = new Percolation(3);
-        System.out.println(test_perc.xyTo1D(2,1));
+        //System.out.println(test_perc.xyTo1D(2,1));
         //System.out.println(test_perc.grid[1][1]);
         //System.out.println(test_perc.isOpen(1,1));
         //test_perc.open(1,1);
-        //test_perc.open(1,2);
-        System.out.println(test_perc.numberOfOpenSites());
+        test_perc.open(1,1);
+        System.out.println(test_perc.percolates());
+        test_perc.open(2,1);
+        test_perc.open(3,1);
+        System.out.println(test_perc.percolates());
         //test_perc.open(1,2);
         //System.out.println(test_perc.grid[1][1]);
         //System.out.println(test_perc.isOpen(1,1));
-        System.out.println(test_perc.x.find(2));
-        
-        
+        //System.out.println(test_perc.x.find(2));
    }
 }
 
